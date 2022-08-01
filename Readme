@@ -1,0 +1,3 @@
+1. Open Terminal
+2. Install NPM: npm install --save-dev nightwatch-api nightwatch cucumber chromedriver cucumber-pretty
+3. How to Run: npm run e2e-test -- features/Partner-Signup.feature
