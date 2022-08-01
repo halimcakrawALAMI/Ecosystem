@@ -6,14 +6,17 @@ let noHP = '08123456789'
 let password = 'Password01'
 
 function makeEmail(length){
+ var length = 5
  var result = '';
-    var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    var characters = '0123456789';
     var charactersLength = characters.length;
     for ( var i = 0; i < length; i++ ) {
       result += characters.charAt(Math.floor(Math.random() * charactersLength));
    }
-   return 'Automation_' + result + '@mailnesia.com';
+   return 'automation' + result;
 }
+
+var email = makeEmail(5)
 
 Given(/^I open Register Partner page$/, () => {
   return client.url('https://dev.p2p-3.alamisharia.co.id/register/partner').waitForElementVisible('body', 1000);
@@ -33,7 +36,8 @@ Then(/^Input nama lengkap$/, () => {
 });
 
 Then(/^Input email$/, () => {
-  client.setValue("//input[@id='registerEmailPartnership']", [makeEmail(5)]);
+  client.setValue("//input[@id='registerEmailPartnership']", [email] + '@mailnesia.com');
+  console.log(email)
 });
 
 Then(/^Input NoHP$/, () => {
@@ -59,4 +63,25 @@ Then(/^Click lanjutkan$/, () => {
 Then(/^Success redirect to Terimakasih page$/, () => {
   client.useCss()
   client.expect.element('.one > p:nth-of-type(1)').text.to.equal('Kamu sudah berhasil mendaftar sebagai Partnership. Silahkan klik link aktivasi yang dikirimkan ke email Kamu.');
+});
+
+Then(/^Open Verify Email page$/, () => {
+  return client.url('https://mailnesia.com/').waitForElementVisible('body', 1000);
+});
+
+Then(/^Input email mailnesia$/, () => {
+  client.useXpath()
+  client.setValue("//input[@id='mailbox']", [email]);
+});
+
+Then(/^Click search inbox$/, () => {
+  client.click("//input[@id='sm']");
+});
+
+Then(/^Click detail email$/, () => {
+  client.click("//tr[1]");
+});
+
+Then(/^Click lanjutkan persetujuan$/, () => {
+  client.click("p:nth-of-type(6) > a");
 });
